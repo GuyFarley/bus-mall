@@ -11,14 +11,14 @@ header h1 {
   font-size: 36pt;
 }
 
-#results {
+/* #results {
   display: flex;
   align-items: center;
   flex-direction: column;
   height: 600px;
-}
+} */
 
-#show-results-btn {
+/* #show-results-btn {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,19 +29,19 @@ header h1 {
   background-color: rgb(71, 69, 69);
   color: white;
   transition: 350ms;
-}
+} */
 
-#show-results-btn:hover {
+/* #show-results-btn:hover {
   background-color: rgb(112, 110, 110);
-}
+} */
 
-#display-results {
+/* #display-results {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 12pt;
   margin-top: 20px;
   line-height: 1.5em;
   list-style-type: disc;
-}
+} */
 
 #container {
   display: flex;
@@ -58,4 +58,9 @@ header h1 {
   border-style: solid;
   border-color: black;
   border-width: 3px;
+}
+
+#chart {
+  display: flex;
+  justify-content: center;
 }
