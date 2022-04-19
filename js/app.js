@@ -54,24 +54,24 @@ new Product('unicorn');
 new Product('water-can');
 new Product('wine-glass');
 
-console.log(productArray);
-
 // **************************** EXECUTABLE CODE - HELPER FUNCTIONS ****************************
 
 let indexArray = [];
 
 function renderImages() {
 
-  while (indexArray.length < 3) {
+  while (indexArray.length < 6) {
     let randomNumber = getRandomIndex();
     if (!indexArray.includes(randomNumber)) {
       indexArray.push(randomNumber);
     }
   }
 
-  let productOneIndex = indexArray.pop();
-  let productTwoIndex = indexArray.pop();
-  let productThreeIndex = indexArray.pop();
+  console.log(indexArray);
+
+  let productOneIndex = indexArray.shift();
+  let productTwoIndex = indexArray.shift();
+  let productThreeIndex = indexArray.shift();
 
   // change img src and alt for each img tag in HTML
   imgOne.src = productArray[productOneIndex].img;
@@ -85,6 +85,8 @@ function renderImages() {
   imgThree.src = productArray[productThreeIndex].img;
   imgThree.alt = productArray[productThreeIndex].productName;
   productArray[productThreeIndex].views++;
+
+
 }
 renderImages();
 
