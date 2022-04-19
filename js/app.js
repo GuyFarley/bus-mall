@@ -2,7 +2,7 @@
 
 // **************************** GLOBAL VARIABLES ****************************
 
-let totalRounds = 25;
+let totalRounds = 5;
 let productArray = [];
 
 
@@ -13,9 +13,13 @@ let imgOne = document.getElementById('image-one');
 let imgTwo = document.getElementById('image-two');
 let imgThree = document.getElementById('image-three');
 
-let resultsList = document.getElementById('display-results');
-let resultsBtn = document.getElementById('show-results-btn');
+// let resultsList = document.getElementById('display-results');
+// let resultsBtn = document.getElementById('show-results-btn');
 
+// **************************** CANVAS REFERENCE ****************************
+
+
+let ctx = document.getElementById('myChart');
 
 // **************************** CONSTRUCTOR ****************************
 
@@ -54,16 +58,20 @@ console.log(productArray);
 
 // **************************** EXECUTABLE CODE - HELPER FUNCTIONS ****************************
 
+let indexArray = [];
+
 function renderImages() {
 
-  let productOneIndex = getRandomIndex();
-  let productTwoIndex = getRandomIndex();
-  let productThreeIndex = getRandomIndex();
-
-  while (productOneIndex === productTwoIndex || productOneIndex === productThreeIndex || productTwoIndex === productThreeIndex) {
-    productTwoIndex = getRandomIndex();
-    productThreeIndex = getRandomIndex();
+  while (indexArray.length < 3) {
+    let randomNumber = getRandomIndex();
+    if (!indexArray.includes(randomNumber)) {
+      indexArray.push(randomNumber);
+    }
   }
+
+  let productOneIndex = indexArray.pop();
+  let productTwoIndex = indexArray.pop();
+  let productThreeIndex = indexArray.pop();
 
   // change img src and alt for each img tag in HTML
   imgOne.src = productArray[productOneIndex].img;
@@ -100,24 +108,81 @@ function handleClick(event) {
 
   if (totalRounds === 0) {
     imgContainer.removeEventListener('click', handleClick);
+    renderProductChart(); // renders chart once all voting rounds are complete
   }
 
   renderImages();
 }
 
-function handleShowResults() {
-  if (totalRounds === 0) {
-    for (let i = 0; i < productArray.length; i++) {
-      let liElem = document.createElement('li');
-      liElem.textContent = `${productArray[i].productName} was shown ${productArray[i].views} times and was chosen ${productArray[i].clicks} times.`;
-      resultsList.appendChild(liElem);
-    }
+
+// **************************** CREATE CHART ****************************
+
+function renderProductChart() {
+
+  let productNames = [];
+  let productVotes = [];
+  let productViews = [];
+
+  for (let i = 0; i < productArray.length; i++) {
+    productNames.push(productArray[i].productName);
+    productViews.push(productArray[i].views);
+    productVotes.push(productArray[i].clicks);
   }
+
+
+  let myChartObj = {
+    type: 'bar',
+    data: {
+      labels: productNames, // product names
+      datasets: [{
+        label: '# of Votes', // # votes
+        data: productVotes, // actual votes
+        backgroundColor: [
+          'blue'
+        ],
+        borderColor: [
+          'blue'
+        ],
+        borderWidth: 1
+      },
+      {
+        label: '# of Views', // # views
+        data: productViews, // actual views
+        backgroundColor: [
+          'green'
+        ],
+        borderColor: [
+          'green'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  };
+
+  new Chart(ctx, myChartObj);
+
 }
+
+// function handleShowResults() {
+//   if (totalRounds === 0) {
+//     for (let i = 0; i < productArray.length; i++) {
+//       let liElem = document.createElement('li');
+//       liElem.textContent = `${productArray[i].productName} was shown ${productArray[i].views} times and was chosen ${productArray[i].clicks} times.`;
+//       resultsList.appendChild(liElem);
+//     }
+//   }
+// }
 
 // **************************** EVENT LISTENERS ****************************
 
 imgContainer.addEventListener('click', handleClick);
-resultsBtn.addEventListener('click', handleShowResults);
+// resultsBtn.addEventListener('click', handleShowResults);
 
 
