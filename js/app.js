@@ -2,7 +2,7 @@
 
 // **************************** GLOBAL VARIABLES ****************************
 
-let totalRounds = 25;
+let totalRounds = 10;
 let productArray = [];
 
 
@@ -21,6 +21,14 @@ let imgThree = document.getElementById('image-three');
 
 let ctx = document.getElementById('myChart');
 
+
+// **************************** LOCAL STORAGE ****************************
+
+let retrievedProducts = localStorage.getItem('products'); // Gets product data out of local storage
+
+let parsedProducts = JSON.parse(retrievedProducts); // Parses data from local storage for use in code
+
+
 // **************************** CONSTRUCTOR ****************************
 
 function Product(name, fileExtensions = 'jpg') {
@@ -32,27 +40,35 @@ function Product(name, fileExtensions = 'jpg') {
   productArray.push(this);
 }
 
-// new instances of Product object
 
-new Product('bag');
-new Product('banana');
-new Product('bathroom');
-new Product('boots');
-new Product('breakfast');
-new Product('bubblegum');
-new Product('chair');
-new Product('cthulhu');
-new Product('dog-duck');
-new Product('dragon');
-new Product('pen');
-new Product('pet-sweep');
-new Product('scissors');
-new Product('shark');
-new Product('sweep', 'png');
-new Product('tauntaun');
-new Product('unicorn');
-new Product('water-can');
-new Product('wine-glass');
+
+if (retrievedProducts) {
+  productArray = parsedProducts; // sets new value of productArray to data retrieved from local storage (parsedProducts)
+} else {
+  // new instances of Product object
+  new Product('bag');
+  new Product('banana');
+  new Product('bathroom');
+  new Product('boots');
+  new Product('breakfast');
+  new Product('bubblegum');
+  new Product('chair');
+  new Product('cthulhu');
+  new Product('dog-duck');
+  new Product('dragon');
+  new Product('pen');
+  new Product('pet-sweep');
+  new Product('scissors');
+  new Product('shark');
+  new Product('sweep', 'png');
+  new Product('tauntaun');
+  new Product('unicorn');
+  new Product('water-can');
+  new Product('wine-glass');
+
+}
+
+console.log(productArray);
 
 // **************************** EXECUTABLE CODE - HELPER FUNCTIONS ****************************
 
@@ -111,6 +127,10 @@ function handleClick(event) {
   if (totalRounds === 0) {
     imgContainer.removeEventListener('click', handleClick);
     renderProductChart(); // renders chart once all voting rounds are complete
+
+    let stringifiedProducts = JSON.stringify(productArray); // 1. Stringifies productArray for local storage
+
+    localStorage.setItem('products', stringifiedProducts); // 2. Sets stringified productArray into local storage
   }
 
   renderImages();
