@@ -2,9 +2,8 @@
 
 // **************************** GLOBAL VARIABLES ****************************
 
-let totalRounds = 10;
+let totalRounds = 25;
 let productArray = [];
-
 
 // **************************** DOM REFERENCES ****************************
 
@@ -18,16 +17,12 @@ let imgThree = document.getElementById('image-three');
 
 // **************************** CANVAS REFERENCE ****************************
 
-
 let ctx = document.getElementById('myChart');
-
 
 // **************************** LOCAL STORAGE ****************************
 
 let retrievedProducts = localStorage.getItem('products'); // Gets product data out of local storage
-
 let parsedProducts = JSON.parse(retrievedProducts); // Parses data from local storage for use in code
-
 
 // **************************** CONSTRUCTOR ****************************
 
@@ -39,11 +34,24 @@ function Product(name, fileExtensions = 'jpg') {
 
   productArray.push(this);
 }
-
-
-
 if (retrievedProducts) {
-  productArray = parsedProducts; // sets new value of productArray to data retrieved from local storage (parsedProducts)
+  // productArray = parsedProducts; // sets new value of productArray to data retrieved from local storage (parsedProducts)
+
+  for (let i = 0; i < parsedProducts.length; i++) {
+
+    if (parsedProducts[i].productName === 'sweep') {
+      // runs parsed data back through constructor (if methods exist on constructor function prototype) and updates clicks/views to include persisted data
+      // runs parsed data for 'sweep' object separately due to different file type 'png'
+      let reconstructedSweep = new Product(parsedProducts[i].productName, 'png');
+      reconstructedSweep.clicks = parsedProducts[i].clicks;
+      reconstructedSweep.views = parsedProducts[i].views;
+    } else {
+      // runs parsed data for all other products through constructor, and updates clicks/views to include persisted data
+      let reconstructedProduct = new Product(parsedProducts[i].productName);
+      reconstructedProduct.clicks = parsedProducts[i].clicks;
+      reconstructedProduct.views = parsedProducts[i].views;
+    }
+  }
 } else {
   // new instances of Product object
   new Product('bag');
@@ -65,7 +73,6 @@ if (retrievedProducts) {
   new Product('unicorn');
   new Product('water-can');
   new Product('wine-glass');
-
 }
 
 console.log(productArray);
@@ -82,7 +89,6 @@ function renderImages() {
       indexArray.push(randomNumber);
     }
   }
-
   console.log(indexArray);
 
   let productOneIndex = indexArray.shift();
@@ -101,7 +107,6 @@ function renderImages() {
   imgThree.src = productArray[productThreeIndex].img;
   imgThree.alt = productArray[productThreeIndex].productName;
   productArray[productThreeIndex].views++;
-
 
 }
 renderImages();
@@ -136,7 +141,6 @@ function handleClick(event) {
   renderImages();
 }
 
-
 // **************************** CREATE CHART ****************************
 
 function renderProductChart() {
@@ -150,7 +154,6 @@ function renderProductChart() {
     productViews.push(productArray[i].views);
     productVotes.push(productArray[i].clicks);
   }
-
 
   let myChartObj = {
     type: 'bar',
@@ -189,7 +192,6 @@ function renderProductChart() {
   };
 
   new Chart(ctx, myChartObj);
-
 }
 
 // function handleShowResults() {
